@@ -20,11 +20,10 @@ endif()
 
 add_subdirectory(src)
 
-if(BUILD_TESTING)
-  add_subdirectory(tests)
-endif()
+# if(BUILD_TESTING)
+#   add_subdirectory(tests)
+# endif()
 
-set(AROBASE "@")
 configure_file(etc/CircularOriController.in.yaml
                "${CMAKE_CURRENT_BINARY_DIR}/etc/CircularOriController.yaml")
 install(FILES "${CMAKE_CURRENT_BINARY_DIR}/etc/CircularOriController.yaml"

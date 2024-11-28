@@ -7,6 +7,7 @@ int main(int argc, char * argv[])
     mc_rtc::log::critical("Should provide a configuration file for mc_rtc");
     return 1;
   }
+  mc_rtc::log::critical("LOADING {}", argv[1]);
   mc_control::MCGlobalController gc(argv[1]);
 
   const auto & mb = gc.robot().mb();

@@ -1,7 +1,7 @@
-mc_rtc new controller template
+mc_rtc new FSM controller template
 ==
 
-This project is a template for a new controller project wihtin [mc_rtc]
+This project is a template for a new FSM controller project wihtin [mc_rtc]
 
 It comes with:
 - a CMake project that can build a controller in [mc_rtc], the project can be put within [mc_rtc] source-tree for easier updates
@@ -17,6 +17,8 @@ Quick start
 sed -i -e's/CircularOriController/MyController/g' `find . -type f`
 git mv src/CircularOriController.cpp src/MyController.cpp
 git mv src/CircularOriController.h src/MyController.h
+git mv src/states/CircularOriController_Initial.cpp src/states/MyController_Initial.cpp
+git mv src/states/CircularOriController_Initial.h src/states/MyController_Initial.h
 git mv etc/CircularOriController.in.yaml etc/MyController.in.yaml
 ```
 

@@ -1,0 +1,4 @@
+add_fsm_state_simple(CircularOriController_Initial)
+add_fsm_state_simple(CircularOriController_Rotate)
+
+add_fsm_data_directory(data)

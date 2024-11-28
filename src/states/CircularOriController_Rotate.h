@@ -1,0 +1,19 @@
+#pragma once
+
+#include <mc_control/fsm/State.h>
+
+struct CircularOriController_Rotate : mc_control::fsm::State
+{
+
+  void configure(const mc_rtc::Configuration & config) override;
+
+  void start(mc_control::fsm::Controller & ctl) override;
+
+  bool run(mc_control::fsm::Controller & ctl) override;
+
+  void teardown(mc_control::fsm::Controller & ctl) override;
+
+private:
+  int state_ = 0;
+  bool need_home_ = false;
+};

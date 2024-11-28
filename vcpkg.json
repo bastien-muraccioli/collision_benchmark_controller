@@ -1,5 +1,5 @@
 {
-  "name": "mc-rtc-new-controller",
+  "name": "mc-rtc-new-fsm-controller",
   "version-string": "1.0.0",
   "homepage": "",
   "description": "CircularOriController for mc_rtc",

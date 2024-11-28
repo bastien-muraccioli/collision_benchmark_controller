@@ -1,1 +1,46 @@
 ---
+# If true, the FSM transitions are managed by an external tool
+Managed: false
+# If true and the FSM is self-managed, transitions should be triggered
+StepByStep: true
+# Change idle behaviour, if true the state is kept until transition,
+# otherwise the FSM holds the last state until transition
+IdleKeepState: false
+# Where to look for state libraries
+StatesLibraries:
+  - "@MC_STATES_DEFAULT_RUNTIME_INSTALL_PREFIX@"
+  - "@MC_STATES_RUNTIME_INSTALL_PREFIX@"
+# Where to look for state files
+StatesFiles:
+  - "@MC_STATES_DEFAULT_RUNTIME_INSTALL_PREFIX@/data"
+  - "@MC_STATES_RUNTIME_INSTALL_PREFIX@/data"
+# If true, state factory will be more verbose
+VerboseStateFactory: false
+# Additional robots to load
+robots:
+  ground:
+    module: env/ground
+
+# Collision constraint
+collisions:
+  - type: collision
+    useMinimal: true
+
+# Implement some additional text states
+states: {}
+# Transitions map
+transitions:
+- [CircularOriController_Initial, OK, CircularOriController_Initial, Strict]
+- [CircularOriController_Initial, OK, CircularOriController_Rotate, Strict]
+- [CircularOriController_Rotate, OK, CircularOriController_Initial, Strict]
+
+# Initial state
+init: CircularOriController_Initial
+
+ObserverPipelines:
+  - name: Pipeline
+    observers:
+      - type: Encoder
+        config:
+          velocity: encoderVelocities
+
