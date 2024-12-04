@@ -20,16 +20,30 @@ CircularOriController::CircularOriController(mc_rbdyn::RobotModulePtr rm, double
                    {"joint_5", {0.96}}, {"joint_6", {0.96}},  {"joint_7", {1.57}}};
   postureLeft = {{"joint_1", {0}}, {"joint_2", {0.262}}, {"joint_3", {3.14}}, {"joint_4", {-2.269}},
                    {"joint_5", {-0.96}}, {"joint_6", {0.96}},  {"joint_7", {1.57}}};
+  postureBigRotate = {{"joint_1", {1.57}}, {"joint_2", {0.262}}, {"joint_3", {3.14}}, {"joint_4", {-2.269}},
+                   {"joint_5", {0}}, {"joint_6", {0.96}},  {"joint_7", {1.57}}};
+
+  taskPosHome = Eigen::Vector3d(0.45, 0.0, 0.45);
+  taskPosForward = Eigen::Vector3d(0.65, 0.0, 0.45);
+
+  
 
   solver().removeTask(getPostureTask(robot().name()));
+  compEETask = std::make_shared<mc_tasks::CompliantEndEffectorTask>("FT_sensor_mounting", robots(),
+                                                                    robot().robotIndex(), 1, 1);
+  // compEETask->reset();
+  // // compEETask->positionTask->refVel(Eigen::Vector3d(1.5, 1.5, 1.5));
+  // solver().addTask(compEETask);
+  
   compPostureTask = std::make_shared<mc_tasks::CompliantPostureTask>(solver(), robot().robotIndex(), 1, 1);
   compPostureTask->reset();
-  compPostureTask->stiffness(10.0);
-  compPostureTask->damping(3.0);
+  compPostureTask->stiffness(100.0);
+  // compPostureTask->damping(3.0);
   solver().addTask(compPostureTask);
 
   datastore().make<std::string>("ControlMode", "Position");
   datastore().make_call("getPostureTask", [this]() -> mc_tasks::PostureTaskPtr { return compPostureTask; });
+  logger().addLogEntry("EndEffectorVel", [this]() { return robot().bodyVelW("FT_sensor_mounting"); });
 
   mc_rtc::log::success("CircularOriController init done ");
 }

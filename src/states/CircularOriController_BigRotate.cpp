@@ -1,12 +1,12 @@
-#include "CircularOriController_Rotate.h"
+#include "CircularOriController_BigRotate.h"
 
 // #include <obstacle_detection_jerk_estimator/ObstacleDetectionJerkEstimator.h>
 
 #include "../CircularOriController.h"
 
-void CircularOriController_Rotate::configure(const mc_rtc::Configuration & config) {}
+void CircularOriController_BigRotate::configure(const mc_rtc::Configuration & config) {}
 
-void CircularOriController_Rotate::start(mc_control::fsm::Controller & ctl_)
+void CircularOriController_BigRotate::start(mc_control::fsm::Controller & ctl_)
 {
   auto & ctl = static_cast<CircularOriController &>(ctl_);
   // Activate feedback from external forces estimator (safer)
@@ -24,11 +24,11 @@ void CircularOriController_Rotate::start(mc_control::fsm::Controller & ctl_)
   // ctl.compPostureTask->makeCompliant(false);
 
   ctl.datastore().assign<std::string>("ControlMode", "Position");
-
   ctl.compPostureTask->target(ctl.postureHome);
+  ctl.compPostureTask->stiffness(10);
 }
 
-bool CircularOriController_Rotate::run(mc_control::fsm::Controller & ctl_)
+bool CircularOriController_BigRotate::run(mc_control::fsm::Controller & ctl_)
 {
   auto & ctl = static_cast<CircularOriController &>(ctl_);
 
@@ -49,44 +49,19 @@ bool CircularOriController_Rotate::run(mc_control::fsm::Controller & ctl_)
     }
     else
     {
-      switch (state_) 
-      {
-        case 0:
-          ctl.compPostureTask->target(ctl.postureUp);
-          state_ = 1;
-          break;
-        case 1:
-          ctl.compPostureTask->target(ctl.postureDown);
-          state_ = 2;
-          break;
-        case 2:
-          ctl.compPostureTask->target(ctl.postureRight);
-          state_ = 3;
-          break;
-        case 3:
-          ctl.compPostureTask->target(ctl.postureLeft);
-          state_ = 0;
-          break;
-      }
+      ctl.compPostureTask->target(ctl.postureBigRotate);
       need_home_ = true;
     }
   }
 
-  // reset_plot_timer += ctl.timeStep;
-  // if(reset_plot_timer > reset_plot_max_time)
-  // {
-  //   ctl.datastore().call("ObstacleDetectionJerkEstimator::ResetPlot");
-  //   reset_plot_timer = 0.0;
-  // }
 // output("OK");
 //   return true;
   return false;
 }
 
-void CircularOriController_Rotate::teardown(mc_control::fsm::Controller & ctl_)
+void CircularOriController_BigRotate::teardown(mc_control::fsm::Controller & ctl_)
 {
   auto & ctl = static_cast<CircularOriController &>(ctl_);
-  // ctl.datastore().call("ObstacleDetectionJerkEstimator::RemovePlot");
 }
 
-EXPORT_SINGLE_STATE("CircularOriController_Rotate", CircularOriController_Rotate)
+EXPORT_SINGLE_STATE("CircularOriController_BigRotate", CircularOriController_BigRotate)
