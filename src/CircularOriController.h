@@ -21,6 +21,7 @@ struct CircularOriController_DLLAPI CircularOriController : public mc_control::f
   std::map<std::string, std::vector<double>> postureRight;
   std::map<std::string, std::vector<double>> postureLeft;
   std::map<std::string, std::vector<double>> postureBigRotate;
+  std::map<std::string, std::vector<double>> postureBigRotate_end;
 
   Eigen::Vector3d taskPosHome;
   Eigen::Vector3d taskPosForward;

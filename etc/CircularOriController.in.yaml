@@ -31,11 +31,17 @@ states: {}
 # Transitions map
 transitions:
 - [CircularOriController_Initial, OK, CircularOriController_Initial, Strict]
-- [CircularOriController_Initial, OK, CircularOriController_Rotate, Strict]
-- [CircularOriController_Rotate, OK, CircularOriController_Initial, Strict]
+- [CircularOriController_Initial, R, CircularOriController_Rotate, Strict]
+- [CircularOriController_Rotate, R, CircularOriController_Initial, Strict]
+- [CircularOriController_Initial, BR, CircularOriController_BigRotate, Strict]
+- [CircularOriController_BigRotate, BR, CircularOriController_Initial, Strict]
+- [CircularOriController_Initial, F, CircularOriController_Forward, Strict]
+- [CircularOriController_Forward, F, CircularOriController_Initial, Strict]
 
 # Initial state
 init: CircularOriController_Initial
+
+Plugins: [RosImuSensor, ExternalForcesEstimator, ObstacleDetectionJerkEstimator]
 
 ObserverPipelines:
   - name: Pipeline

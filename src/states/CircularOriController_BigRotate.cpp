@@ -24,7 +24,7 @@ void CircularOriController_BigRotate::start(mc_control::fsm::Controller & ctl_)
   // ctl.compPostureTask->makeCompliant(false);
 
   ctl.datastore().assign<std::string>("ControlMode", "Position");
-  ctl.compPostureTask->target(ctl.postureHome);
+  ctl.compPostureTask->target(ctl.postureBigRotate);
   ctl.compPostureTask->stiffness(10);
 }
 
@@ -44,12 +44,12 @@ bool CircularOriController_BigRotate::run(mc_control::fsm::Controller & ctl_)
   {
     if(need_home_)
     {
-      ctl.compPostureTask->target(ctl.postureHome);
+      ctl.compPostureTask->target(ctl.postureBigRotate);
       need_home_ = false;
     }
     else
     {
-      ctl.compPostureTask->target(ctl.postureBigRotate);
+      ctl.compPostureTask->target(ctl.postureBigRotate_end);
       need_home_ = true;
     }
   }
