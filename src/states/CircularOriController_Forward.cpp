@@ -1,7 +1,4 @@
 #include "CircularOriController_Forward.h"
-
-// #include <obstacle_detection_jerk_estimator/ObstacleDetectionJerkEstimator.h>
-
 #include "../CircularOriController.h"
 
 void CircularOriController_Forward::configure(const mc_rtc::Configuration & config) {}
@@ -39,17 +36,16 @@ void CircularOriController_Forward::start(mc_control::fsm::Controller & ctl_)
 bool CircularOriController_Forward::run(mc_control::fsm::Controller & ctl_)
 {
   auto & ctl = static_cast<CircularOriController &>(ctl_);
-
+  ctl.datastore().assign<std::string>("State", "Forward");
   if(ctl.datastore().get<bool>("Obstacle detected"))
   {
     ctl.compPostureTask->reset();
     ctl.compEETask->reset();
     ctl.compPostureTask->stiffness(500);
-    output("Init");
+    output(ctl.reaction_mode);
     return true;
   }
 
-   mc_rtc::log::info("Eval norm: {}", ctl.compEETask->positionTask->eval().norm());
   if (ctl.compEETask->positionTask->eval().norm() < 0.01)
   {
    
@@ -57,14 +53,14 @@ bool CircularOriController_Forward::run(mc_control::fsm::Controller & ctl_)
     {
       ctl.compEETask->positionTask->position(ctl.taskPosHome);
       need_home_ = false;
-      mc_rtc::log::info("Need home");
+      // mc_rtc::log::info("Need home");
       ctl.compEETask->positionTask->stiffness(10);
     }
     else
     {
       ctl.compEETask->positionTask->position(ctl.taskPosForward);
       need_home_ = true;
-      mc_rtc::log::info("Need forward");
+      // mc_rtc::log::info("Need forward");
       ctl.compEETask->positionTask->stiffness(100);
     }
   }

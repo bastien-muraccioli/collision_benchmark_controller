@@ -31,12 +31,25 @@ states: {}
 # Transitions map
 transitions:
 - [CircularOriController_Initial, OK, CircularOriController_Initial, Strict]
-- [CircularOriController_Initial, R, CircularOriController_Rotate, Strict]
-- [CircularOriController_Rotate, R, CircularOriController_Initial, Strict]
-- [CircularOriController_Initial, BR, CircularOriController_BigRotate, Strict]
-- [CircularOriController_BigRotate, BR, CircularOriController_Initial, Strict]
-- [CircularOriController_Initial, F, CircularOriController_Forward, Strict]
-- [CircularOriController_Forward, F, CircularOriController_Initial, Strict]
+- [CircularOriController_Initial, Rotate, CircularOriController_Rotate, Strict]
+- [CircularOriController_Rotate, OK, CircularOriController_Initial, Strict]
+- [CircularOriController_Initial, BigRotate, CircularOriController_BigRotate, Strict]
+- [CircularOriController_BigRotate, OK, CircularOriController_Initial, Strict]
+- [CircularOriController_Initial, Forward, CircularOriController_Forward, Strict]
+- [CircularOriController_Forward, OK, CircularOriController_Initial, Strict]
+- [CircularOriController_Initial, ReactionSimple, CircularOriController_ReactionSimple, Strict]
+- [CircularOriController_ReactionSimple, OK, CircularOriController_Initial, Strict]
+- [CircularOriController_Initial, ReactionCompliance CircularOriController_ReactionCompliance, Strict]
+- [CircularOriController_ReactionCompliance, OK, CircularOriController_Initial, Strict]
+
+- [CircularOriController_BigRotate, ReactionSimple, CircularOriController_ReactionSimple, Auto]
+- [CircularOriController_Rotate, ReactionSimple, CircularOriController_ReactionSimple, Auto]
+- [CircularOriController_Forward, ReactionSimple, CircularOriController_ReactionSimple, Auto]
+
+- [CircularOriController_BigRotate, ReactionCompliance, CircularOriController_ReactionCompliance, Auto]
+- [CircularOriController_Rotate, ReactionCompliance, CircularOriController_ReactionCompliance, Auto]
+- [CircularOriController_Forward, ReactionCompliance, CircularOriController_ReactionCompliance, Auto]
+
 
 # Initial state
 init: CircularOriController_Initial

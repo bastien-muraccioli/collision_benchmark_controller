@@ -3,6 +3,7 @@
 CircularOriController::CircularOriController(mc_rbdyn::RobotModulePtr rm, double dt, const mc_rtc::Configuration & config)
 : mc_control::fsm::Controller(rm, dt, config, Backend::TVM)
 {
+
   // Initialize the constraints
   selfCollisionConstraint->setCollisionsDampers(solver(), {1.8, 70.0});
   solver().removeConstraintSet(dynamicsConstraint);
@@ -30,8 +31,6 @@ CircularOriController::CircularOriController(mc_rbdyn::RobotModulePtr rm, double
   taskPosHome = Eigen::Vector3d(0.45, 0.0, 0.45);
   taskPosForward = Eigen::Vector3d(0.65, 0.0, 0.45);
 
-  
-
   solver().removeTask(getPostureTask(robot().name()));
   compEETask = std::make_shared<mc_tasks::CompliantEndEffectorTask>("FT_sensor_mounting", robots(),
                                                                     robot().robotIndex(), 1, 1);
@@ -46,15 +45,41 @@ CircularOriController::CircularOriController(mc_rbdyn::RobotModulePtr rm, double
   solver().addTask(compPostureTask);
 
   datastore().make<std::string>("ControlMode", "Position");
+  datastore().make<std::string>("TorqueMode", "Custom");
+  datastore().make<std::string>("State", "Initial");
+  datastore().make<std::string>("ReactionMode", "ReactionSimple");
   datastore().make_call("getPostureTask", [this]() -> mc_tasks::PostureTaskPtr { return compPostureTask; });
   logger().addLogEntry("EndEffectorVel", [this]() { return robot().bodyVelW("FT_sensor_mounting"); });
+  logger().addLogEntry("CircularOriController_fsmState",[this]() 
+  { auto mode = datastore().get<std::string>("State");
+    if(mode.compare("") == 0) return 0;
+    if(mode.compare("Initial") == 0) return 1;
+    if(mode.compare("Forward") == 0) return 2;
+    if(mode.compare("Rotate") == 0) return 3;
+    if(mode.compare("BigRotate") == 0) return 4;
+    if(mode.compare("ReactionSimple") == 0) return 5; 
+    });
+  gui()->addElement({"Controller", "CircularOriController"},
+    mc_rtc::gui::ComboInput(
+      "Reaction Mode", {"NoReaction", "ReactionSimple", "ReactionCompliance"},
+      [this]() {return reaction_mode;},
+      [this](const std::string & t){reaction_mode = t;})
+    );  
 
   mc_rtc::log::success("CircularOriController init done ");
 }
 
 bool CircularOriController::run()
 {
-  return mc_control::fsm::Controller::run();
+  auto ctrl_mode = datastore().get<std::string>("ControlMode");
+  if(ctrl_mode.compare("Position") == 0)
+  {
+    return mc_control::fsm::Controller::run(mc_solver::FeedbackType::OpenLoop);
+  }
+  else
+  {
+    return mc_control::fsm::Controller::run(mc_solver::FeedbackType::ClosedLoopIntegrateReal);
+  }
 }
 
 void CircularOriController::reset(const mc_control::ControllerResetData & reset_data)

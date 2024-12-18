@@ -31,12 +31,13 @@ void CircularOriController_BigRotate::start(mc_control::fsm::Controller & ctl_)
 bool CircularOriController_BigRotate::run(mc_control::fsm::Controller & ctl_)
 {
   auto & ctl = static_cast<CircularOriController &>(ctl_);
+  ctl.datastore().assign<std::string>("State", "BigRotate");
 
   if(ctl.datastore().get<bool>("Obstacle detected"))
   {
     ctl.compPostureTask->reset();
     ctl.compPostureTask->stiffness(500);
-    output("Init");
+    output(ctl.reaction_mode);
     return true;
   }
 

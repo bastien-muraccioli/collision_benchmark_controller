@@ -2,7 +2,14 @@
 
 #include <mc_control/fsm/State.h>
 
-struct CircularOriController_Initial : mc_control::fsm::State
+#include <RBDyn/Coriolis.h>
+#include <RBDyn/FA.h>
+#include <RBDyn/FK.h>
+#include <RBDyn/FV.h>
+#include <RBDyn/MultiBody.h>
+#include <RBDyn/MultiBodyConfig.h>
+
+struct CircularOriController_ReactionSimple : mc_control::fsm::State
 {
 
   void configure(const mc_rtc::Configuration & config) override;
@@ -14,5 +21,8 @@ struct CircularOriController_Initial : mc_control::fsm::State
   void teardown(mc_control::fsm::Controller & ctl) override;
 
 private:
-  bool task_achieved_;
+
+  std::vector<bool> joint_stop_;
+  int jointNumber_;
+  bool all_joint_stop_;
 };

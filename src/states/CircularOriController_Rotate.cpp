@@ -1,7 +1,4 @@
 #include "CircularOriController_Rotate.h"
-
-// #include <obstacle_detection_jerk_estimator/ObstacleDetectionJerkEstimator.h>
-
 #include "../CircularOriController.h"
 
 void CircularOriController_Rotate::configure(const mc_rtc::Configuration & config) {}
@@ -26,17 +23,20 @@ void CircularOriController_Rotate::start(mc_control::fsm::Controller & ctl_)
   ctl.datastore().assign<std::string>("ControlMode", "Position");
 
   ctl.compPostureTask->target(ctl.postureHome);
+
+  ctl.compPostureTask->stiffness(100);
 }
 
 bool CircularOriController_Rotate::run(mc_control::fsm::Controller & ctl_)
 {
   auto & ctl = static_cast<CircularOriController &>(ctl_);
+  ctl.datastore().assign<std::string>("State", "Rotate");
 
   if(ctl.datastore().get<bool>("Obstacle detected"))
   {
     ctl.compPostureTask->reset();
     ctl.compPostureTask->stiffness(500);
-    output("Init");
+    output(ctl.reaction_mode);
     return true;
   }
 

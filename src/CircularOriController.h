@@ -1,6 +1,6 @@
 #pragma once
-
 #include <mc_control/fsm/Controller.h>
+#include <mc_rbdyn/VirtualTorqueSensor.h>
 #include <mc_tasks/CompliantPostureTask.h>
 #include <mc_tasks/CompliantEndEffectorTask.h>
 
@@ -31,7 +31,7 @@ struct CircularOriController_DLLAPI CircularOriController : public mc_control::f
   std::shared_ptr<mc_tasks::CompliantEndEffectorTask> compEETask;
 
   bool plot_initialized = false;
-
+  std::string reaction_mode = "ReactionSimple";
 
 private:
   mc_rtc::Configuration config_;
