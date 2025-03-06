@@ -28,6 +28,11 @@ CircularOriController::CircularOriController(mc_rbdyn::RobotModulePtr rm, double
   postureBigRotate_end = {{"joint_1", {1.57}}, {"joint_2", {0.8}}, {"joint_3", {3.14}}, {"joint_4", {-1.3}},
                    {"joint_5", {0}}, {"joint_6", {0.55}},  {"joint_7", {1.57}}};
 
+  postureBigUp = {{"joint_1", {0}}, {"joint_2", {0.262}}, {"joint_3", {3.14}}, {"joint_4", {-2.269}},
+                   {"joint_5", {0}}, {"joint_6", {1.7}},  {"joint_7", {1.57}}};
+  postureBigDown = {{"joint_1", {0}}, {"joint_2", {0.262}}, {"joint_3", {3.14}}, {"joint_4", {-2.269}},
+                   {"joint_5", {0}}, {"joint_6", {-0.50}},  {"joint_7", {1.57}}};
+
   taskPosHome = Eigen::Vector3d(0.45, 0.0, 0.45);
   taskPosForward = Eigen::Vector3d(0.65, 0.0, 0.45);
 
@@ -64,7 +69,7 @@ CircularOriController::CircularOriController(mc_rbdyn::RobotModulePtr rm, double
       "Reaction Mode", {"NoReaction", "ReactionSimple", "ReactionCompliance"},
       [this]() {return reaction_mode;},
       [this](const std::string & t){reaction_mode = t;})
-    );  
+    );
 
   mc_rtc::log::success("CircularOriController init done ");
 }

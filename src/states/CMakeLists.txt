@@ -1,4 +1,5 @@
 add_fsm_state_simple(CircularOriController_Initial)
+add_fsm_state_simple(CircularOriController_BirjandiRotate)
 add_fsm_state_simple(CircularOriController_Rotate)
 add_fsm_state_simple(CircularOriController_BigRotate)
 add_fsm_state_simple(CircularOriController_Forward)

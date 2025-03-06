@@ -5,6 +5,7 @@
 #include <mc_tasks/CompliantEndEffectorTask.h>
 
 #include "api.h"
+#include <Eigen/src/Core/Matrix.h>
 
 struct CircularOriController_DLLAPI CircularOriController : public mc_control::fsm::Controller
 {
@@ -22,6 +23,8 @@ struct CircularOriController_DLLAPI CircularOriController : public mc_control::f
   std::map<std::string, std::vector<double>> postureLeft;
   std::map<std::string, std::vector<double>> postureBigRotate;
   std::map<std::string, std::vector<double>> postureBigRotate_end;
+  std::map<std::string, std::vector<double>> postureBigUp;
+  std::map<std::string, std::vector<double>> postureBigDown;
 
   Eigen::Vector3d taskPosHome;
   Eigen::Vector3d taskPosForward;

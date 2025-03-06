@@ -15,12 +15,12 @@ void CircularOriController_Initial::start(mc_control::fsm::Controller & ctl_)
 
   ctl.datastore().assign<std::string>("ControlMode", "Position");
 
-  if(!ctl.plot_initialized)
-  {
-    // Show the plots
-    ctl.datastore().call("ObstacleDetectionJerkEstimator::ResetPlot");
-    ctl.plot_initialized = true;
-  }
+  // if(!ctl.plot_initialized)
+  // {
+  //   // Show the plots
+  //   ctl.datastore().call("ObstacleDetectionJerkEstimator::ResetPlot");
+  //   ctl.plot_initialized = true;
+  // }
   task_achieved_ = false;
 }
 
@@ -28,6 +28,13 @@ bool CircularOriController_Initial::run(mc_control::fsm::Controller & ctl_)
 {
   auto & ctl = static_cast<CircularOriController &>(ctl_);
   ctl.datastore().assign<std::string>("State", "Initial");
+  if(ctl.datastore().has("Obstacle detected"))
+  {
+    if(ctl.datastore().get<bool>("Obstacle detected"))
+    {
+      ctl.datastore().get<bool>("Obstacle detected") = false;
+    }
+  }
   if(ctl.compPostureTask->eval().norm() < 0.05 && !task_achieved_)
   {
     task_achieved_ = true;

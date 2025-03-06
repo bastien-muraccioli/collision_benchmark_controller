@@ -7,16 +7,16 @@ void CircularOriController_ReactionCompliance::start(mc_control::fsm::Controller
 {
   auto & ctl = static_cast<CircularOriController &>(ctl_);
   // Activate feedback from external forces estimator (safer)
-  if(!ctl.datastore().call<bool>("EF_Estimator::isActive"))
-  {
-    ctl.datastore().call("EF_Estimator::toggleActive");
-  }
-  // Activate force sensor usage if not used yet
-  if(!ctl.datastore().call<bool>("EF_Estimator::useForceSensor"))
-  {
-    ctl.datastore().call("EF_Estimator::toggleForceSensor");
-  }
-  ctl.datastore().call<void, double>("EF_Estimator::setGain", 30.0);
+  // if(!ctl.datastore().call<bool>("EF_Estimator::isActive"))
+  // {
+  //   ctl.datastore().call("EF_Estimator::toggleActive");
+  // }
+  // // Activate force sensor usage if not used yet
+  // if(!ctl.datastore().call<bool>("EF_Estimator::useForceSensor"))
+  // {
+  //   ctl.datastore().call("EF_Estimator::toggleForceSensor");
+  // }
+  // ctl.datastore().call<void, double>("EF_Estimator::setGain", 30.0);
 
   ctl.compPostureTask->stiffness(0.0);
   ctl.compPostureTask->damping(5.0);
