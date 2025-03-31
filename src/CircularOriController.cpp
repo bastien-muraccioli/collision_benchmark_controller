@@ -32,6 +32,12 @@ CircularOriController::CircularOriController(mc_rbdyn::RobotModulePtr rm, double
                    {"joint_5", {0}}, {"joint_6", {1.7}},  {"joint_7", {1.57}}};
   postureBigDown = {{"joint_1", {0}}, {"joint_2", {0.262}}, {"joint_3", {3.14}}, {"joint_4", {-2.269}},
                    {"joint_5", {0}}, {"joint_6", {-0.50}},  {"joint_7", {1.57}}};
+  postureHorizontalStart = {{"joint_1", {0}}, {"joint_2", {0.0}}, {"joint_3", {3.14}}, {"joint_4", {-1.57}},
+                   {"joint_5", {1.57}}, {"joint_6", {0}},  {"joint_7", {0}}};
+  postureBigLeft = {{"joint_1", {0}}, {"joint_2", {0.0}}, {"joint_3", {3.14}}, {"joint_4", {-1.57}},
+                   {"joint_5", {1.57}}, {"joint_6", {1.6}},  {"joint_7", {0}}};
+  postureBigRight = {{"joint_1", {0}}, {"joint_2", {0.0}}, {"joint_3", {3.14}}, {"joint_4", {-1.57}},
+                   {"joint_5", {1.57}}, {"joint_6", {-1.6}},  {"joint_7", {0}}};
 
   taskPosHome = Eigen::Vector3d(0.45, 0.0, 0.45);
   taskPosForward = Eigen::Vector3d(0.65, 0.0, 0.45);

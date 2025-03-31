@@ -35,6 +35,8 @@ transitions:
 - [CircularOriController_Rotate, OK, CircularOriController_Initial, Strict]
 - [CircularOriController_Initial, BirjandiRotate, CircularOriController_BirjandiRotate, Strict]
 - [CircularOriController_BirjandiRotate, OK, CircularOriController_Initial, Strict]
+- [CircularOriController_Initial, BirjandiRotateHorizontal, CircularOriController_BirjandiRotateHorizontal, Strict]
+- [CircularOriController_BirjandiRotateHorizontal, OK, CircularOriController_Initial, Strict]
 - [CircularOriController_Initial, BigRotate, CircularOriController_BigRotate, Strict]
 - [CircularOriController_BigRotate, OK, CircularOriController_Initial, Strict]
 - [CircularOriController_Initial, Forward, CircularOriController_Forward, Strict]
@@ -47,11 +49,13 @@ transitions:
 - [CircularOriController_BigRotate, ReactionSimple, CircularOriController_ReactionSimple, Auto]
 - [CircularOriController_Rotate, ReactionSimple, CircularOriController_ReactionSimple, Auto]
 - [CircularOriController_BirjandiRotate, ReactionSimple, CircularOriController_ReactionSimple, Auto]
+- [CircularOriController_BirjandiRotateHorizontal, ReactionSimple, CircularOriController_ReactionSimple, Auto]
 - [CircularOriController_Forward, ReactionSimple, CircularOriController_ReactionSimple, Auto]
 
 - [CircularOriController_BigRotate, ReactionCompliance, CircularOriController_ReactionCompliance, Auto]
 - [CircularOriController_Rotate, ReactionCompliance, CircularOriController_ReactionCompliance, Auto]
 - [CircularOriController_BirjandiRotate, ReactionCompliance, CircularOriController_ReactionCompliance, Auto]
+- [CircularOriController_BirjandiRotateHorizontal, ReactionCompliance, CircularOriController_ReactionCompliance, Auto]
 - [CircularOriController_Forward, ReactionCompliance, CircularOriController_ReactionCompliance, Auto]
 
 

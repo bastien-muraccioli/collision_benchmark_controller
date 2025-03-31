@@ -14,13 +14,6 @@ void CircularOriController_Initial::start(mc_control::fsm::Controller & ctl_)
   ctl.solver().removeTask(ctl.compEETask);
 
   ctl.datastore().assign<std::string>("ControlMode", "Position");
-
-  // if(!ctl.plot_initialized)
-  // {
-  //   // Show the plots
-  //   ctl.datastore().call("ObstacleDetectionJerkEstimator::ResetPlot");
-  //   ctl.plot_initialized = true;
-  // }
   task_achieved_ = false;
 }
 

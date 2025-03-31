@@ -25,6 +25,9 @@ struct CircularOriController_DLLAPI CircularOriController : public mc_control::f
   std::map<std::string, std::vector<double>> postureBigRotate_end;
   std::map<std::string, std::vector<double>> postureBigUp;
   std::map<std::string, std::vector<double>> postureBigDown;
+  std::map<std::string, std::vector<double>> postureHorizontalStart;
+  std::map<std::string, std::vector<double>> postureBigLeft;
+  std::map<std::string, std::vector<double>> postureBigRight;
 
   Eigen::Vector3d taskPosHome;
   Eigen::Vector3d taskPosForward;
@@ -32,8 +35,6 @@ struct CircularOriController_DLLAPI CircularOriController : public mc_control::f
   // Tasks
   std::shared_ptr<mc_tasks::CompliantPostureTask> compPostureTask;
   std::shared_ptr<mc_tasks::CompliantEndEffectorTask> compEETask;
-
-  bool plot_initialized = false;
   std::string reaction_mode = "ReactionSimple";
 
 private:
