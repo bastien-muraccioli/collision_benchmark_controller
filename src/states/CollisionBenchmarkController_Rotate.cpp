@@ -1,11 +1,11 @@
-#include "CircularOriController_Rotate.h"
-#include "../CircularOriController.h"
+#include "CollisionBenchmarkController_Rotate.h"
+#include "../CollisionBenchmarkController.h"
 
-void CircularOriController_Rotate::configure(const mc_rtc::Configuration & config) {}
+void CollisionBenchmarkController_Rotate::configure(const mc_rtc::Configuration & config) {}
 
-void CircularOriController_Rotate::start(mc_control::fsm::Controller & ctl_)
+void CollisionBenchmarkController_Rotate::start(mc_control::fsm::Controller & ctl_)
 {
-  auto & ctl = static_cast<CircularOriController &>(ctl_);
+  auto & ctl = static_cast<CollisionBenchmarkController &>(ctl_);
   // Activate feedback from external forces estimator (safer)
   // if(!ctl.datastore().call<bool>("EF_Estimator::isActive"))
   // {
@@ -27,9 +27,9 @@ void CircularOriController_Rotate::start(mc_control::fsm::Controller & ctl_)
   ctl.compPostureTask->stiffness(100);
 }
 
-bool CircularOriController_Rotate::run(mc_control::fsm::Controller & ctl_)
+bool CollisionBenchmarkController_Rotate::run(mc_control::fsm::Controller & ctl_)
 {
-  auto & ctl = static_cast<CircularOriController &>(ctl_);
+  auto & ctl = static_cast<CollisionBenchmarkController &>(ctl_);
   ctl.datastore().assign<std::string>("State", "Rotate");
 
   if(ctl.datastore().get<bool>("Obstacle detected"))
@@ -83,10 +83,10 @@ bool CircularOriController_Rotate::run(mc_control::fsm::Controller & ctl_)
   return false;
 }
 
-void CircularOriController_Rotate::teardown(mc_control::fsm::Controller & ctl_)
+void CollisionBenchmarkController_Rotate::teardown(mc_control::fsm::Controller & ctl_)
 {
-  auto & ctl = static_cast<CircularOriController &>(ctl_);
+  auto & ctl = static_cast<CollisionBenchmarkController &>(ctl_);
   // ctl.datastore().call("ObstacleDetectionJerkEstimator::RemovePlot");
 }
 
-EXPORT_SINGLE_STATE("CircularOriController_Rotate", CircularOriController_Rotate)
+EXPORT_SINGLE_STATE("CollisionBenchmarkController_Rotate", CollisionBenchmarkController_Rotate)

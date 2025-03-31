@@ -1,10 +1,10 @@
-set(controller_SRC CircularOriController.cpp)
+set(controller_SRC CollisionBenchmarkController.cpp)
 
-set(controller_HDR CircularOriController.h)
+set(controller_HDR CollisionBenchmarkController.h)
 
 add_library(${PROJECT_NAME} SHARED ${controller_SRC} ${controller_HDR})
 set_target_properties(${PROJECT_NAME} PROPERTIES COMPILE_FLAGS
-                                                 "-DCircularOriController_EXPORTS")
+                                                 "-DCollisionBenchmarkController_EXPORTS")
 target_link_libraries(${PROJECT_NAME} PUBLIC mc_rtc::mc_control_fsm)
 install(
   TARGETS ${PROJECT_NAME}

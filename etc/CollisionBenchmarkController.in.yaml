@@ -1,0 +1,73 @@
+---
+# If true, the FSM transitions are managed by an external tool
+Managed: false
+# If true and the FSM is self-managed, transitions should be triggered
+StepByStep: true
+# Change idle behaviour, if true the state is kept until transition,
+# otherwise the FSM holds the last state until transition
+IdleKeepState: false
+# Where to look for state libraries
+StatesLibraries:
+  - "@MC_STATES_DEFAULT_RUNTIME_INSTALL_PREFIX@"
+  - "@MC_STATES_RUNTIME_INSTALL_PREFIX@"
+# Where to look for state files
+StatesFiles:
+  - "@MC_STATES_DEFAULT_RUNTIME_INSTALL_PREFIX@/data"
+  - "@MC_STATES_RUNTIME_INSTALL_PREFIX@/data"
+# If true, state factory will be more verbose
+VerboseStateFactory: false
+# Additional robots to load
+robots:
+  ground:
+    module: env/ground
+
+# Collision constraint
+collisions:
+  - type: collision
+    useMinimal: true
+
+# Implement some additional text states
+states: {}
+# Transitions map
+transitions:
+- [CollisionBenchmarkController_Initial, OK, CollisionBenchmarkController_Initial, Strict]
+- [CollisionBenchmarkController_Initial, Rotate, CollisionBenchmarkController_Rotate, Strict]
+- [CollisionBenchmarkController_Rotate, OK, CollisionBenchmarkController_Initial, Strict]
+- [CollisionBenchmarkController_Initial, BirjandiRotate, CollisionBenchmarkController_BirjandiRotate, Strict]
+- [CollisionBenchmarkController_BirjandiRotate, OK, CollisionBenchmarkController_Initial, Strict]
+- [CollisionBenchmarkController_Initial, BirjandiRotateHorizontal, CollisionBenchmarkController_BirjandiRotateHorizontal, Strict]
+- [CollisionBenchmarkController_BirjandiRotateHorizontal, OK, CollisionBenchmarkController_Initial, Strict]
+- [CollisionBenchmarkController_Initial, BigRotate, CollisionBenchmarkController_BigRotate, Strict]
+- [CollisionBenchmarkController_BigRotate, OK, CollisionBenchmarkController_Initial, Strict]
+- [CollisionBenchmarkController_Initial, Forward, CollisionBenchmarkController_Forward, Strict]
+- [CollisionBenchmarkController_Forward, OK, CollisionBenchmarkController_Initial, Strict]
+- [CollisionBenchmarkController_Initial, ReactionSimple, CollisionBenchmarkController_ReactionSimple, Strict]
+- [CollisionBenchmarkController_ReactionSimple, OK, CollisionBenchmarkController_Initial, Strict]
+- [CollisionBenchmarkController_Initial, ReactionCompliance CollisionBenchmarkController_ReactionCompliance, Strict]
+- [CollisionBenchmarkController_ReactionCompliance, OK, CollisionBenchmarkController_Initial, Strict]
+
+- [CollisionBenchmarkController_BigRotate, ReactionSimple, CollisionBenchmarkController_ReactionSimple, Auto]
+- [CollisionBenchmarkController_Rotate, ReactionSimple, CollisionBenchmarkController_ReactionSimple, Auto]
+- [CollisionBenchmarkController_BirjandiRotate, ReactionSimple, CollisionBenchmarkController_ReactionSimple, Auto]
+- [CollisionBenchmarkController_BirjandiRotateHorizontal, ReactionSimple, CollisionBenchmarkController_ReactionSimple, Auto]
+- [CollisionBenchmarkController_Forward, ReactionSimple, CollisionBenchmarkController_ReactionSimple, Auto]
+
+- [CollisionBenchmarkController_BigRotate, ReactionCompliance, CollisionBenchmarkController_ReactionCompliance, Auto]
+- [CollisionBenchmarkController_Rotate, ReactionCompliance, CollisionBenchmarkController_ReactionCompliance, Auto]
+- [CollisionBenchmarkController_BirjandiRotate, ReactionCompliance, CollisionBenchmarkController_ReactionCompliance, Auto]
+- [CollisionBenchmarkController_BirjandiRotateHorizontal, ReactionCompliance, CollisionBenchmarkController_ReactionCompliance, Auto]
+- [CollisionBenchmarkController_Forward, ReactionCompliance, CollisionBenchmarkController_ReactionCompliance, Auto]
+
+
+# Initial state
+init: CollisionBenchmarkController_Initial
+
+# Plugins: [RosImuSensor, ExternalForcesEstimator, ObstacleDetectionJerkEstimator]
+
+ObserverPipelines:
+  - name: Pipeline
+    observers:
+      - type: Encoder
+        config:
+          velocity: encoderVelocities
+

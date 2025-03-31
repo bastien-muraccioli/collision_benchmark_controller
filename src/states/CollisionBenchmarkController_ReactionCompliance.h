@@ -2,7 +2,7 @@
 
 #include <mc_control/fsm/State.h>
 
-struct CircularOriController_BigRotate : mc_control::fsm::State
+struct CollisionBenchmarkController_ReactionCompliance : mc_control::fsm::State
 {
 
   void configure(const mc_rtc::Configuration & config) override;
@@ -14,5 +14,4 @@ struct CircularOriController_BigRotate : mc_control::fsm::State
   void teardown(mc_control::fsm::Controller & ctl) override;
 
 private:
-  bool need_home_ = false;
 };

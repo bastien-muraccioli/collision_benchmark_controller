@@ -2,7 +2,7 @@
 
 #include <mc_control/fsm/State.h>
 
-struct CircularOriController_Initial : mc_control::fsm::State
+struct CollisionBenchmarkController_BirjandiRotateHorizontal : mc_control::fsm::State
 {
 
   void configure(const mc_rtc::Configuration & config) override;
@@ -14,5 +14,8 @@ struct CircularOriController_Initial : mc_control::fsm::State
   void teardown(mc_control::fsm::Controller & ctl) override;
 
 private:
-  bool task_achieved_;
+  int state_;
+  double reset_plot_timer = 0.0;
+  double reset_plot_max_time = 30.0; // 30 seconds
+//   bool need_home_ = false;
 };

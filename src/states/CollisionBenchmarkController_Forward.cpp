@@ -1,11 +1,11 @@
-#include "CircularOriController_Forward.h"
-#include "../CircularOriController.h"
+#include "CollisionBenchmarkController_Forward.h"
+#include "../CollisionBenchmarkController.h"
 
-void CircularOriController_Forward::configure(const mc_rtc::Configuration & config) {}
+void CollisionBenchmarkController_Forward::configure(const mc_rtc::Configuration & config) {}
 
-void CircularOriController_Forward::start(mc_control::fsm::Controller & ctl_)
+void CollisionBenchmarkController_Forward::start(mc_control::fsm::Controller & ctl_)
 {
-  auto & ctl = static_cast<CircularOriController &>(ctl_);
+  auto & ctl = static_cast<CollisionBenchmarkController &>(ctl_);
   // Activate feedback from external forces estimator (safer)
   // if(!ctl.datastore().call<bool>("EF_Estimator::isActive"))
   // {
@@ -33,9 +33,9 @@ void CircularOriController_Forward::start(mc_control::fsm::Controller & ctl_)
   ctl.solver().addTask(ctl.compEETask);
 }
 
-bool CircularOriController_Forward::run(mc_control::fsm::Controller & ctl_)
+bool CollisionBenchmarkController_Forward::run(mc_control::fsm::Controller & ctl_)
 {
-  auto & ctl = static_cast<CircularOriController &>(ctl_);
+  auto & ctl = static_cast<CollisionBenchmarkController &>(ctl_);
   ctl.datastore().assign<std::string>("State", "Forward");
   if(ctl.datastore().get<bool>("Obstacle detected"))
   {
@@ -70,10 +70,10 @@ bool CircularOriController_Forward::run(mc_control::fsm::Controller & ctl_)
   return false;
 }
 
-void CircularOriController_Forward::teardown(mc_control::fsm::Controller & ctl_)
+void CollisionBenchmarkController_Forward::teardown(mc_control::fsm::Controller & ctl_)
 {
-  auto & ctl = static_cast<CircularOriController &>(ctl_);
+  auto & ctl = static_cast<CollisionBenchmarkController &>(ctl_);
   ctl.solver().removeTask(ctl.compEETask);
 }
 
-EXPORT_SINGLE_STATE("CircularOriController_Forward", CircularOriController_Forward)
+EXPORT_SINGLE_STATE("CollisionBenchmarkController_Forward", CollisionBenchmarkController_Forward)

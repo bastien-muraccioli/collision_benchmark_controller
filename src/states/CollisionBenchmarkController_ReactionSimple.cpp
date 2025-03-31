@@ -1,11 +1,11 @@
-#include "CircularOriController_ReactionSimple.h"
-#include "../CircularOriController.h"
+#include "CollisionBenchmarkController_ReactionSimple.h"
+#include "../CollisionBenchmarkController.h"
 
-void CircularOriController_ReactionSimple::configure(const mc_rtc::Configuration & config) {}
+void CollisionBenchmarkController_ReactionSimple::configure(const mc_rtc::Configuration & config) {}
 
-void CircularOriController_ReactionSimple::start(mc_control::fsm::Controller & ctl_)
+void CollisionBenchmarkController_ReactionSimple::start(mc_control::fsm::Controller & ctl_)
 {
-  auto & ctl = static_cast<CircularOriController &>(ctl_);
+  auto & ctl = static_cast<CollisionBenchmarkController &>(ctl_);
   auto & robot = ctl.robot();
   auto & rjo = robot.refJointOrder();
   jointNumber_ = rjo.size();
@@ -19,9 +19,9 @@ void CircularOriController_ReactionSimple::start(mc_control::fsm::Controller & c
   }
 }
 
-bool CircularOriController_ReactionSimple::run(mc_control::fsm::Controller & ctl_)
+bool CollisionBenchmarkController_ReactionSimple::run(mc_control::fsm::Controller & ctl_)
 {
-  auto & ctl = static_cast<CircularOriController &>(ctl_);
+  auto & ctl = static_cast<CollisionBenchmarkController &>(ctl_);
   auto & robot = ctl.robot();
   auto & rjo = robot.refJointOrder();
   ctl.datastore().assign<std::string>("State", "ReactionSimple");
@@ -52,9 +52,9 @@ bool CircularOriController_ReactionSimple::run(mc_control::fsm::Controller & ctl
   return false;
 }
 
-void CircularOriController_ReactionSimple::teardown(mc_control::fsm::Controller & ctl_)
+void CollisionBenchmarkController_ReactionSimple::teardown(mc_control::fsm::Controller & ctl_)
 {
-  auto & ctl = static_cast<CircularOriController &>(ctl_);
+  auto & ctl = static_cast<CollisionBenchmarkController &>(ctl_);
 }
 
-EXPORT_SINGLE_STATE("CircularOriController_ReactionSimple", CircularOriController_ReactionSimple)
+EXPORT_SINGLE_STATE("CollisionBenchmarkController_ReactionSimple", CollisionBenchmarkController_ReactionSimple)

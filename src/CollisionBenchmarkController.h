@@ -7,9 +7,9 @@
 #include "api.h"
 #include <Eigen/src/Core/Matrix.h>
 
-struct CircularOriController_DLLAPI CircularOriController : public mc_control::fsm::Controller
+struct CollisionBenchmarkController_DLLAPI CollisionBenchmarkController : public mc_control::fsm::Controller
 {
-  CircularOriController(mc_rbdyn::RobotModulePtr rm, double dt, const mc_rtc::Configuration & config);
+  CollisionBenchmarkController(mc_rbdyn::RobotModulePtr rm, double dt, const mc_rtc::Configuration & config);
 
   bool run() override;
 

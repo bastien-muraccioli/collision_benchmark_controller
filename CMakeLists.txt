@@ -3,8 +3,8 @@ cmake_minimum_required(VERSION 3.1)
 set(CXX_DISABLE_WERROR 1)
 set(CMAKE_CXX_STANDARD 11)
 
-set(PROJECT_NAME CircularOriController)
-set(PROJECT_DESCRIPTION "CircularOriController")
+set(PROJECT_NAME CollisionBenchmarkController)
+set(PROJECT_DESCRIPTION "CollisionBenchmarkController")
 set(PROJECT_URL "")
 
 project(
@@ -25,7 +25,7 @@ add_subdirectory(src)
 #   add_subdirectory(tests)
 # endif()
 
-configure_file(etc/CircularOriController.in.yaml
-               "${CMAKE_CURRENT_BINARY_DIR}/etc/CircularOriController.yaml")
-install(FILES "${CMAKE_CURRENT_BINARY_DIR}/etc/CircularOriController.yaml"
+configure_file(etc/CollisionBenchmarkController.in.yaml
+               "${CMAKE_CURRENT_BINARY_DIR}/etc/CollisionBenchmarkController.yaml")
+install(FILES "${CMAKE_CURRENT_BINARY_DIR}/etc/CollisionBenchmarkController.yaml"
         DESTINATION "${MC_CONTROLLER_RUNTIME_INSTALL_PREFIX}/etc")

@@ -1,5 +1,5 @@
-#include "CircularOriController.h"
+#include "CollisionBenchmarkController.h"
 
 #include <mc_control/mc_controller.h>
 
-CONTROLLER_CONSTRUCTOR("CircularOriController", CircularOriController)
+CONTROLLER_CONSTRUCTOR("CollisionBenchmarkController", CollisionBenchmarkController)

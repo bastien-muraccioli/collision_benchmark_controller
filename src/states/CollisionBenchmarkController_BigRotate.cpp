@@ -1,14 +1,14 @@
-#include "CircularOriController_BigRotate.h"
+#include "CollisionBenchmarkController_BigRotate.h"
 
 // #include <obstacle_detection_jerk_estimator/ObstacleDetectionJerkEstimator.h>
 
-#include "../CircularOriController.h"
+#include "../CollisionBenchmarkController.h"
 
-void CircularOriController_BigRotate::configure(const mc_rtc::Configuration & config) {}
+void CollisionBenchmarkController_BigRotate::configure(const mc_rtc::Configuration & config) {}
 
-void CircularOriController_BigRotate::start(mc_control::fsm::Controller & ctl_)
+void CollisionBenchmarkController_BigRotate::start(mc_control::fsm::Controller & ctl_)
 {
-  auto & ctl = static_cast<CircularOriController &>(ctl_);
+  auto & ctl = static_cast<CollisionBenchmarkController &>(ctl_);
   // Activate feedback from external forces estimator (safer)
   // if(ctl.datastore().call<bool>("EF_Estimator::isActive"))
   // {
@@ -28,9 +28,9 @@ void CircularOriController_BigRotate::start(mc_control::fsm::Controller & ctl_)
   ctl.compPostureTask->stiffness(10);
 }
 
-bool CircularOriController_BigRotate::run(mc_control::fsm::Controller & ctl_)
+bool CollisionBenchmarkController_BigRotate::run(mc_control::fsm::Controller & ctl_)
 {
-  auto & ctl = static_cast<CircularOriController &>(ctl_);
+  auto & ctl = static_cast<CollisionBenchmarkController &>(ctl_);
   ctl.datastore().assign<std::string>("State", "BigRotate");
 
   if(ctl.datastore().get<bool>("Obstacle detected"))
@@ -60,9 +60,9 @@ bool CircularOriController_BigRotate::run(mc_control::fsm::Controller & ctl_)
   return false;
 }
 
-void CircularOriController_BigRotate::teardown(mc_control::fsm::Controller & ctl_)
+void CollisionBenchmarkController_BigRotate::teardown(mc_control::fsm::Controller & ctl_)
 {
-  auto & ctl = static_cast<CircularOriController &>(ctl_);
+  auto & ctl = static_cast<CollisionBenchmarkController &>(ctl_);
 }
 
-EXPORT_SINGLE_STATE("CircularOriController_BigRotate", CircularOriController_BigRotate)
+EXPORT_SINGLE_STATE("CollisionBenchmarkController_BigRotate", CollisionBenchmarkController_BigRotate)

@@ -4,13 +4,13 @@ file(
   INPUT "${CMAKE_CURRENT_SOURCE_DIR}/etc/mc_rtc.yaml")
 
 set(MC_STATES_RUNTIME_INSTALL_PREFIX
-    "$<TARGET_FILE_DIR:CircularOriController_Initial>")
-configure_file("${PROJECT_SOURCE_DIR}/etc/CircularOriController.in.yaml"
-               "${CMAKE_CURRENT_BINARY_DIR}/etc/CircularOriController.cmake.yaml")
+    "$<TARGET_FILE_DIR:CollisionBenchmarkController_Initial>")
+configure_file("${PROJECT_SOURCE_DIR}/etc/CollisionBenchmarkController.in.yaml"
+               "${CMAKE_CURRENT_BINARY_DIR}/etc/CollisionBenchmarkController.cmake.yaml")
 file(
   GENERATE
-  OUTPUT "$<TARGET_FILE_DIR:CircularOriController>/etc/CircularOriController.yaml"
-  INPUT "${CMAKE_CURRENT_BINARY_DIR}/etc/CircularOriController.cmake.yaml")
+  OUTPUT "$<TARGET_FILE_DIR:CollisionBenchmarkController>/etc/CollisionBenchmarkController.yaml"
+  INPUT "${CMAKE_CURRENT_BINARY_DIR}/etc/CollisionBenchmarkController.cmake.yaml")
 
 if(MSVC AND _VCPKG_INSTALLED_DIR)
   set(VCPKG_INSTALL_PREFIX "${_VCPKG_INSTALLED_DIR}/${VCPKG_TARGET_PREFIX}")

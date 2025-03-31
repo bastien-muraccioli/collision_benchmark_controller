@@ -1,11 +1,11 @@
-#include "CircularOriController_BirjandiRotateHorizontal.h"
-#include "../CircularOriController.h"
+#include "CollisionBenchmarkController_BirjandiRotate.h"
+#include "../CollisionBenchmarkController.h"
 
-void CircularOriController_BirjandiRotateHorizontal::configure(const mc_rtc::Configuration & config) {}
+void CollisionBenchmarkController_BirjandiRotate::configure(const mc_rtc::Configuration & config) {}
 
-void CircularOriController_BirjandiRotateHorizontal::start(mc_control::fsm::Controller & ctl_)
+void CollisionBenchmarkController_BirjandiRotate::start(mc_control::fsm::Controller & ctl_)
 {
-  auto & ctl = static_cast<CircularOriController &>(ctl_);
+  auto & ctl = static_cast<CollisionBenchmarkController &>(ctl_);
   // Activate feedback from external forces estimator (safer)
   // if(!ctl.datastore().call<bool>("EF_Estimator::isActive"))
   // {
@@ -22,16 +22,14 @@ void CircularOriController_BirjandiRotateHorizontal::start(mc_control::fsm::Cont
 
   ctl.datastore().assign<std::string>("ControlMode", "Position");
 
-  ctl.compPostureTask->target(ctl.postureHorizontalStart);
+  ctl.compPostureTask->target(ctl.postureHome);
 
   ctl.compPostureTask->stiffness(100);
-  ctl.compPostureTask->damping(100);
-  state_ = 2;
 }
 
-bool CircularOriController_BirjandiRotateHorizontal::run(mc_control::fsm::Controller & ctl_)
+bool CollisionBenchmarkController_BirjandiRotate::run(mc_control::fsm::Controller & ctl_)
 {
-  auto & ctl = static_cast<CircularOriController &>(ctl_);
+  auto & ctl = static_cast<CollisionBenchmarkController &>(ctl_);
   ctl.datastore().assign<std::string>("State", "Rotate");
 
   if(ctl.datastore().get<bool>("Obstacle detected"))
@@ -54,16 +52,11 @@ bool CircularOriController_BirjandiRotateHorizontal::run(mc_control::fsm::Contro
       switch (state_) 
       {
         case 0:
-          ctl.compPostureTask->target(ctl.postureBigLeft);
+          ctl.compPostureTask->target(ctl.postureBigUp);
           state_ = 1;
           break;
         case 1:
-          ctl.compPostureTask->target(ctl.postureBigRight);
-          state_ = 0;
-          break;
-        case 2: // To remove damping
-          ctl.compPostureTask->reset();
-          ctl.compPostureTask->stiffness(100);
+          ctl.compPostureTask->target(ctl.postureBigDown);
           state_ = 0;
           break;
       }
@@ -74,9 +67,9 @@ bool CircularOriController_BirjandiRotateHorizontal::run(mc_control::fsm::Contro
   return false;
 }
 
-void CircularOriController_BirjandiRotateHorizontal::teardown(mc_control::fsm::Controller & ctl_)
+void CollisionBenchmarkController_BirjandiRotate::teardown(mc_control::fsm::Controller & ctl_)
 {
-  auto & ctl = static_cast<CircularOriController &>(ctl_);
+  auto & ctl = static_cast<CollisionBenchmarkController &>(ctl_);
 }
 
-EXPORT_SINGLE_STATE("CircularOriController_BirjandiRotateHorizontal", CircularOriController_BirjandiRotateHorizontal)
+EXPORT_SINGLE_STATE("CollisionBenchmarkController_BirjandiRotate", CollisionBenchmarkController_BirjandiRotate)

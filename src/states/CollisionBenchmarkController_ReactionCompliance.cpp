@@ -1,11 +1,11 @@
-#include "CircularOriController_ReactionCompliance.h"
-#include "../CircularOriController.h"
+#include "CollisionBenchmarkController_ReactionCompliance.h"
+#include "../CollisionBenchmarkController.h"
 
-void CircularOriController_ReactionCompliance::configure(const mc_rtc::Configuration & config) {}
+void CollisionBenchmarkController_ReactionCompliance::configure(const mc_rtc::Configuration & config) {}
 
-void CircularOriController_ReactionCompliance::start(mc_control::fsm::Controller & ctl_)
+void CollisionBenchmarkController_ReactionCompliance::start(mc_control::fsm::Controller & ctl_)
 {
-  auto & ctl = static_cast<CircularOriController &>(ctl_);
+  auto & ctl = static_cast<CollisionBenchmarkController &>(ctl_);
   // Activate feedback from external forces estimator (safer)
   // if(!ctl.datastore().call<bool>("EF_Estimator::isActive"))
   // {
@@ -57,15 +57,15 @@ void CircularOriController_ReactionCompliance::start(mc_control::fsm::Controller
   ctl.datastore().assign<std::string>("ControlMode", "Torque");
 }
 
-bool CircularOriController_ReactionCompliance::run(mc_control::fsm::Controller & ctl_)
+bool CollisionBenchmarkController_ReactionCompliance::run(mc_control::fsm::Controller & ctl_)
 {
-  auto & ctl = static_cast<CircularOriController &>(ctl_);
+  auto & ctl = static_cast<CollisionBenchmarkController &>(ctl_);
   return false;
 }
 
-void CircularOriController_ReactionCompliance::teardown(mc_control::fsm::Controller & ctl_)
+void CollisionBenchmarkController_ReactionCompliance::teardown(mc_control::fsm::Controller & ctl_)
 {
-  auto & ctl = static_cast<CircularOriController &>(ctl_);
+  auto & ctl = static_cast<CollisionBenchmarkController &>(ctl_);
 }
 
-EXPORT_SINGLE_STATE("CircularOriController_ReactionCompliance", CircularOriController_ReactionCompliance)
+EXPORT_SINGLE_STATE("CollisionBenchmarkController_ReactionCompliance", CollisionBenchmarkController_ReactionCompliance)

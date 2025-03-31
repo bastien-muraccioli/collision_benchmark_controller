@@ -9,7 +9,7 @@
 #include <RBDyn/MultiBody.h>
 #include <RBDyn/MultiBodyConfig.h>
 
-struct CircularOriController_ReactionSimple : mc_control::fsm::State
+struct CollisionBenchmarkController_ReactionSimple : mc_control::fsm::State
 {
 
   void configure(const mc_rtc::Configuration & config) override;

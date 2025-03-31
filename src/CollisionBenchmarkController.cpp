@@ -1,6 +1,6 @@
-#include "CircularOriController.h"
+#include "CollisionBenchmarkController.h"
 
-CircularOriController::CircularOriController(mc_rbdyn::RobotModulePtr rm, double dt, const mc_rtc::Configuration & config)
+CollisionBenchmarkController::CollisionBenchmarkController(mc_rbdyn::RobotModulePtr rm, double dt, const mc_rtc::Configuration & config)
 : mc_control::fsm::Controller(rm, dt, config, Backend::TVM)
 {
 
@@ -61,7 +61,7 @@ CircularOriController::CircularOriController(mc_rbdyn::RobotModulePtr rm, double
   datastore().make<std::string>("ReactionMode", "ReactionSimple");
   datastore().make_call("getPostureTask", [this]() -> mc_tasks::PostureTaskPtr { return compPostureTask; });
   logger().addLogEntry("EndEffectorVel", [this]() { return robot().bodyVelW("FT_sensor_mounting"); });
-  logger().addLogEntry("CircularOriController_fsmState",[this]() 
+  logger().addLogEntry("CollisionBenchmarkController_fsmState",[this]() 
   { auto mode = datastore().get<std::string>("State");
     if(mode.compare("") == 0) return 0;
     if(mode.compare("Initial") == 0) return 1;
@@ -70,17 +70,17 @@ CircularOriController::CircularOriController(mc_rbdyn::RobotModulePtr rm, double
     if(mode.compare("BigRotate") == 0) return 4;
     if(mode.compare("ReactionSimple") == 0) return 5; 
     });
-  gui()->addElement({"Controller", "CircularOriController"},
+  gui()->addElement({"Controller", "CollisionBenchmarkController"},
     mc_rtc::gui::ComboInput(
       "Reaction Mode", {"NoReaction", "ReactionSimple", "ReactionCompliance"},
       [this]() {return reaction_mode;},
       [this](const std::string & t){reaction_mode = t;})
     );
 
-  mc_rtc::log::success("CircularOriController init done ");
+  mc_rtc::log::success("CollisionBenchmarkController init done ");
 }
 
-bool CircularOriController::run()
+bool CollisionBenchmarkController::run()
 {
   auto ctrl_mode = datastore().get<std::string>("ControlMode");
   if(ctrl_mode.compare("Position") == 0)
@@ -93,7 +93,7 @@ bool CircularOriController::run()
   }
 }
 
-void CircularOriController::reset(const mc_control::ControllerResetData & reset_data)
+void CollisionBenchmarkController::reset(const mc_control::ControllerResetData & reset_data)
 {
   mc_control::fsm::Controller::reset(reset_data);
 }
