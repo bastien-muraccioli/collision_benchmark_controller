@@ -1,5 +1,4 @@
 #include "CollisionBenchmarkController_ReactionSimple.h"
-#include "../CollisionBenchmarkController.h"
 
 void CollisionBenchmarkController_ReactionSimple::configure(const mc_rtc::Configuration & config) {}
 
@@ -11,6 +10,9 @@ void CollisionBenchmarkController_ReactionSimple::start(mc_control::fsm::Control
   jointNumber_ = rjo.size();
   ctl.compPostureTask->reset();
   ctl.compPostureTask->stiffness(500);
+  ctl.compPostureTask->damping(500);
+  ctl.compPostureTask->refAccel(Eigen::VectorXd::Zero(jointNumber_));
+  ctl.compPostureTask->refVel(Eigen::VectorXd::Zero(jointNumber_));
   joint_stop_.resize(jointNumber_);
   
   for(int i = 0; i < jointNumber_; i++)
@@ -34,6 +36,8 @@ bool CollisionBenchmarkController_ReactionSimple::run(mc_control::fsm::Controlle
     if(velocity > 0.001 && !joint_stop_[i])
     {
       ctl.compPostureTask->reset();
+      ctl.compPostureTask->stiffness(500);
+      ctl.compPostureTask->damping(500);
       all_joint_stop_ = false;
     }
     else

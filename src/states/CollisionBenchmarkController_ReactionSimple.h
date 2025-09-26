@@ -1,6 +1,7 @@
 #pragma once
 
 #include <mc_control/fsm/State.h>
+#include "../CollisionBenchmarkController.h"
 
 #include <RBDyn/Coriolis.h>
 #include <RBDyn/FA.h>

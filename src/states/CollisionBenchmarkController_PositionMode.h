@@ -3,7 +3,7 @@
 #include <mc_control/fsm/State.h>
 #include "../CollisionBenchmarkController.h"
 
-struct CollisionBenchmarkController_Forward : mc_control::fsm::State
+struct CollisionBenchmarkController_PositionMode : mc_control::fsm::State
 {
 
   void configure(const mc_rtc::Configuration & config) override;
@@ -15,5 +15,4 @@ struct CollisionBenchmarkController_Forward : mc_control::fsm::State
   void teardown(mc_control::fsm::Controller & ctl) override;
 
 private:
-  bool need_home_ = false;
 };

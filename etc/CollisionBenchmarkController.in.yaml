@@ -27,40 +27,64 @@ collisions:
     useMinimal: true
 
 # Implement some additional text states
-states: {}
+states: 
+  ControllerState:
+    base: Meta
+    transitions:
+    # Forward
+    - [CollisionBenchmarkController_Initial, Forward, CollisionBenchmarkController_Forward, Strict]
+    - [CollisionBenchmarkController_Forward, OK, CollisionBenchmarkController_Initial, Strict]
+    - [CollisionBenchmarkController_Forward, ReactionSimple, CollisionBenchmarkController_ReactionSimple, Auto]
+    - [CollisionBenchmarkController_Forward, ReactionCompliance, CollisionBenchmarkController_ReactionCompliance, Auto]
+
+    # Rotate
+    - [CollisionBenchmarkController_Initial, Rotate, CollisionBenchmarkController_Rotate, Strict]
+    - [CollisionBenchmarkController_Rotate, OK, CollisionBenchmarkController_Initial, Strict]
+    - [CollisionBenchmarkController_Rotate, ReactionSimple, CollisionBenchmarkController_ReactionSimple, Auto]
+    - [CollisionBenchmarkController_Rotate, ReactionCompliance, CollisionBenchmarkController_ReactionCompliance, Auto]
+
+    # Big Rotate
+    - [CollisionBenchmarkController_Initial, BigRotate, CollisionBenchmarkController_BigRotate_InitialPose, Strict]
+    - [CollisionBenchmarkController_BigRotate_InitialPose, OK, CollisionBenchmarkController_BigRotate, Auto]
+    - [CollisionBenchmarkController_BigRotate, OK, CollisionBenchmarkController_Initial, Strict]
+    - [CollisionBenchmarkController_BigRotate, ReactionSimple, CollisionBenchmarkController_ReactionSimple, Auto]
+    - [CollisionBenchmarkController_BigRotate, ReactionCompliance, CollisionBenchmarkController_ReactionCompliance, Auto]
+    - [CollisionBenchmarkController_BigRotate_InitialPose, BigRotate, CollisionBenchmarkController_Initial, Strict]
+
+    # Birjandi Rotate
+    - [CollisionBenchmarkController_Initial, BirjandiRotate, CollisionBenchmarkController_BirjandiRotate, Strict]
+    - [CollisionBenchmarkController_BirjandiRotate, OK, CollisionBenchmarkController_Initial, Strict]
+    - [CollisionBenchmarkController_BirjandiRotate, ReactionSimple, CollisionBenchmarkController_ReactionSimple, Auto]
+    - [CollisionBenchmarkController_BirjandiRotate, ReactionCompliance, CollisionBenchmarkController_ReactionCompliance, Auto]
+
+    # Birjandi Rotate Horizontal
+    - [CollisionBenchmarkController_Initial, BirjandiRotateHorizontal, CollisionBenchmarkController_BirjandiRotateHorizontal_InitialPose, Strict]
+    - [CollisionBenchmarkController_BirjandiRotateHorizontal_InitialPose, OK, CollisionBenchmarkController_BirjandiRotateHorizontal, Auto]
+    - [CollisionBenchmarkController_BirjandiRotateHorizontal, OK, CollisionBenchmarkController_Initial, Strict]
+    - [CollisionBenchmarkController_BirjandiRotateHorizontal, ReactionSimple, CollisionBenchmarkController_ReactionSimple, Auto]
+    - [CollisionBenchmarkController_BirjandiRotateHorizontal, ReactionCompliance, CollisionBenchmarkController_ReactionCompliance, Auto]
+    - [CollisionBenchmarkController_BirjandiRotateHorizontal_InitialPose, BirjandiRotateHorizontal, CollisionBenchmarkController_Initial, Strict]
+
+  ModeState:
+    base: Meta
+    transitions:
+    # From Position to Torque
+    - [CollisionBenchmarkController_PositionMode, Torque, CollisionBenchmarkController_TransitionMode, Auto]
+    - [CollisionBenchmarkController_TransitionMode, Torque, CollisionBenchmarkController_TorqueMode, Auto]
+    # From Torque to Position
+    - [CollisionBenchmarkController_TorqueMode, Position, CollisionBenchmarkController_TransitionMode, Auto]
+    - [CollisionBenchmarkController_TransitionMode, Position, CollisionBenchmarkController_PositionMode, Auto]
+
+  FullState:
+    base: Parallel
+    states: [ControllerState, ModeState]
+
 # Transitions map
 transitions:
-- [CollisionBenchmarkController_Initial, OK, CollisionBenchmarkController_Initial, Strict]
-- [CollisionBenchmarkController_Initial, Rotate, CollisionBenchmarkController_Rotate, Strict]
-- [CollisionBenchmarkController_Rotate, OK, CollisionBenchmarkController_Initial, Strict]
-- [CollisionBenchmarkController_Initial, BirjandiRotate, CollisionBenchmarkController_BirjandiRotate, Strict]
-- [CollisionBenchmarkController_BirjandiRotate, OK, CollisionBenchmarkController_Initial, Strict]
-- [CollisionBenchmarkController_Initial, BirjandiRotateHorizontal, CollisionBenchmarkController_BirjandiRotateHorizontal, Strict]
-- [CollisionBenchmarkController_BirjandiRotateHorizontal, OK, CollisionBenchmarkController_Initial, Strict]
-- [CollisionBenchmarkController_Initial, BigRotate, CollisionBenchmarkController_BigRotate, Strict]
-- [CollisionBenchmarkController_BigRotate, OK, CollisionBenchmarkController_Initial, Strict]
-- [CollisionBenchmarkController_Initial, Forward, CollisionBenchmarkController_Forward, Strict]
-- [CollisionBenchmarkController_Forward, OK, CollisionBenchmarkController_Initial, Strict]
-- [CollisionBenchmarkController_Initial, ReactionSimple, CollisionBenchmarkController_ReactionSimple, Strict]
-- [CollisionBenchmarkController_ReactionSimple, OK, CollisionBenchmarkController_Initial, Strict]
-- [CollisionBenchmarkController_Initial, ReactionCompliance CollisionBenchmarkController_ReactionCompliance, Strict]
-- [CollisionBenchmarkController_ReactionCompliance, OK, CollisionBenchmarkController_Initial, Strict]
-
-- [CollisionBenchmarkController_BigRotate, ReactionSimple, CollisionBenchmarkController_ReactionSimple, Auto]
-- [CollisionBenchmarkController_Rotate, ReactionSimple, CollisionBenchmarkController_ReactionSimple, Auto]
-- [CollisionBenchmarkController_BirjandiRotate, ReactionSimple, CollisionBenchmarkController_ReactionSimple, Auto]
-- [CollisionBenchmarkController_BirjandiRotateHorizontal, ReactionSimple, CollisionBenchmarkController_ReactionSimple, Auto]
-- [CollisionBenchmarkController_Forward, ReactionSimple, CollisionBenchmarkController_ReactionSimple, Auto]
-
-- [CollisionBenchmarkController_BigRotate, ReactionCompliance, CollisionBenchmarkController_ReactionCompliance, Auto]
-- [CollisionBenchmarkController_Rotate, ReactionCompliance, CollisionBenchmarkController_ReactionCompliance, Auto]
-- [CollisionBenchmarkController_BirjandiRotate, ReactionCompliance, CollisionBenchmarkController_ReactionCompliance, Auto]
-- [CollisionBenchmarkController_BirjandiRotateHorizontal, ReactionCompliance, CollisionBenchmarkController_ReactionCompliance, Auto]
-- [CollisionBenchmarkController_Forward, ReactionCompliance, CollisionBenchmarkController_ReactionCompliance, Auto]
-
-
+  - [FullState, OK , FullState, Strict]
+  
 # Initial state
-init: CollisionBenchmarkController_Initial
+init: FullState
 
 # Plugins: [RosImuSensor, ExternalForcesEstimator, ObstacleDetectionJerkEstimator]
 

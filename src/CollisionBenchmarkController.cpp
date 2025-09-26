@@ -1,4 +1,5 @@
 #include "CollisionBenchmarkController.h"
+#include <mc_rtc/gui/Checkbox.h>
 
 CollisionBenchmarkController::CollisionBenchmarkController(mc_rbdyn::RobotModulePtr rm, double dt, const mc_rtc::Configuration & config)
 : mc_control::fsm::Controller(rm, dt, config, Backend::TVM)
@@ -55,10 +56,14 @@ CollisionBenchmarkController::CollisionBenchmarkController(mc_rbdyn::RobotModule
   // compPostureTask->damping(3.0);
   solver().addTask(compPostureTask);
 
+  // Kinova Gen3 datastore
   datastore().make<std::string>("ControlMode", "Position");
   datastore().make<std::string>("TorqueMode", "Custom");
+
+  // ConntrollerDatastore
   datastore().make<std::string>("State", "Initial");
   datastore().make<std::string>("ReactionMode", "ReactionSimple");
+  // datastore().make<std::string>("ModeState", "Position");
   datastore().make_call("getPostureTask", [this]() -> mc_tasks::PostureTaskPtr { return compPostureTask; });
   logger().addLogEntry("EndEffectorVel", [this]() { return robot().bodyVelW("FT_sensor_mounting"); });
   logger().addLogEntry("CollisionBenchmarkController_fsmState",[this]() 
@@ -74,7 +79,9 @@ CollisionBenchmarkController::CollisionBenchmarkController(mc_rbdyn::RobotModule
     mc_rtc::gui::ComboInput(
       "Reaction Mode", {"NoReaction", "ReactionSimple", "ReactionCompliance"},
       [this]() {return reaction_mode;},
-      [this](const std::string & t){reaction_mode = t;})
+      [this](const std::string & t){reaction_mode = t;}),
+      mc_rtc::gui::Checkbox("Torque Control", isTorqueControl),
+      mc_rtc::gui::Checkbox("Super Twisting", isSuperTwisting)
     );
 
   mc_rtc::log::success("CollisionBenchmarkController init done ");
@@ -82,6 +89,18 @@ CollisionBenchmarkController::CollisionBenchmarkController(mc_rbdyn::RobotModule
 
 bool CollisionBenchmarkController::run()
 {
+  // if(isTorqueControl != controlModeRequest)
+  // {
+  //   controlModeRequest = isTorqueControl;
+  //   if(isTorqueControl)
+  //   {
+  //     datastore().assign<std::string>("ModeState", "Torque");
+  //   }
+  //   else
+  //   {
+  //     datastore().assign<std::string>("ModeState", "Position");
+  //   }
+  // }
   auto ctrl_mode = datastore().get<std::string>("ControlMode");
   if(ctrl_mode.compare("Position") == 0)
   {

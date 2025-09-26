@@ -1,5 +1,4 @@
 #include "CollisionBenchmarkController_BirjandiRotate.h"
-#include "../CollisionBenchmarkController.h"
 
 void CollisionBenchmarkController_BirjandiRotate::configure(const mc_rtc::Configuration & config) {}
 

@@ -1,5 +1,4 @@
 #include "CollisionBenchmarkController_ReactionCompliance.h"
-#include "../CollisionBenchmarkController.h"
 
 void CollisionBenchmarkController_ReactionCompliance::configure(const mc_rtc::Configuration & config) {}
 

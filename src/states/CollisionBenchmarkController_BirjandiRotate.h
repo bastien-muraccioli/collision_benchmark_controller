@@ -1,6 +1,7 @@
 #pragma once
 
 #include <mc_control/fsm/State.h>
+#include "../CollisionBenchmarkController.h"
 
 struct CollisionBenchmarkController_BirjandiRotate : mc_control::fsm::State
 {

@@ -37,6 +37,11 @@ struct CollisionBenchmarkController_DLLAPI CollisionBenchmarkController : public
   std::shared_ptr<mc_tasks::CompliantEndEffectorTask> compEETask;
   std::string reaction_mode = "ReactionSimple";
 
+  // State variables
+  bool isTorqueControl = false;
+  bool isSuperTwisting = false;
+  // bool controlModeRequest = true;
+
 private:
   mc_rtc::Configuration config_;
 };

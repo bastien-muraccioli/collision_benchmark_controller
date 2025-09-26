@@ -1,5 +1,4 @@
 #include "CollisionBenchmarkController_Rotate.h"
-#include "../CollisionBenchmarkController.h"
 
 void CollisionBenchmarkController_Rotate::configure(const mc_rtc::Configuration & config) {}
 

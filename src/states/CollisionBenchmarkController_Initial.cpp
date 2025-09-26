@@ -1,19 +1,19 @@
 #include "CollisionBenchmarkController_Initial.h"
 
-#include "../CollisionBenchmarkController.h"
-
 void CollisionBenchmarkController_Initial::configure(const mc_rtc::Configuration & config) {}
 
 void CollisionBenchmarkController_Initial::start(mc_control::fsm::Controller & ctl_)
 {
   auto & ctl = static_cast<CollisionBenchmarkController &>(ctl_);
-  // ctl.compPostureTask->stiffness(100.0);
-  ctl.compPostureTask->stiffness(0.5);
+  // ctl.datastore().assign<std::string>("ModeState", "PositionTransition");
+  // ctl.isTorqueControl = false;
+  ctl.compPostureTask->stiffness(1);
+  ctl.compPostureTask->damping(2);
   ctl.compPostureTask->target(ctl.postureHome);
-  ctl.compPostureTask->makeCompliant(false);
+  // ctl.compPostureTask->makeCompliant(false);
   ctl.solver().removeTask(ctl.compEETask);
 
-  ctl.datastore().assign<std::string>("ControlMode", "Position");
+  // ctl.datastore().assign<std::string>("ControlMode", "Position");
   task_achieved_ = false;
 }
 
@@ -33,6 +33,24 @@ bool CollisionBenchmarkController_Initial::run(mc_control::fsm::Controller & ctl
     task_achieved_ = true;
     mc_rtc::log::success("[CollisionBenchmarkController] Get back to initial posture");
   }
+
+  isTorqueControl = ctl.isTorqueControl;
+  if(isTorqueControl != controlModeRequest)
+  {
+    controlModeRequest = isTorqueControl;
+    if(isTorqueControl)
+    {
+      ctl.compPostureTask->reset();
+      ctl.compPostureTask->stiffness(100);
+    }
+    else
+    {
+      ctl.compPostureTask->reset();
+      ctl.compPostureTask->stiffness(1);
+      ctl.compPostureTask->damping(2);
+    }
+  }
+
   // output("OK");
   // return true;
   return false;

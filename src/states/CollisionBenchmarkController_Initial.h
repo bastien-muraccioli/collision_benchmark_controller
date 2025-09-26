@@ -1,6 +1,7 @@
 #pragma once
 
 #include <mc_control/fsm/State.h>
+#include "../CollisionBenchmarkController.h"
 
 struct CollisionBenchmarkController_Initial : mc_control::fsm::State
 {
@@ -15,4 +16,6 @@ struct CollisionBenchmarkController_Initial : mc_control::fsm::State
 
 private:
   bool task_achieved_;
+  bool isTorqueControl = false;
+  bool controlModeRequest = false;
 };

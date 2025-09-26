@@ -1,31 +1,17 @@
 #include "CollisionBenchmarkController_BirjandiRotateHorizontal.h"
-#include "../CollisionBenchmarkController.h"
 
 void CollisionBenchmarkController_BirjandiRotateHorizontal::configure(const mc_rtc::Configuration & config) {}
 
 void CollisionBenchmarkController_BirjandiRotateHorizontal::start(mc_control::fsm::Controller & ctl_)
 {
   auto & ctl = static_cast<CollisionBenchmarkController &>(ctl_);
-  // Activate feedback from external forces estimator (safer)
-  // if(!ctl.datastore().call<bool>("EF_Estimator::isActive"))
-  // {
-  //   ctl.datastore().call("EF_Estimator::toggleActive");
-  // }
-  // // Activate force sensor usage if not used yet
-  // if(!ctl.datastore().call<bool>("EF_Estimator::useForceSensor"))
-  // {
-  //   ctl.datastore().call("EF_Estimator::toggleForceSensor");
-  // }
-  // ctl.datastore().call<void, double>("EF_Estimator::setGain", 10.0);
-
-  // ctl.compPostureTask->makeCompliant(false);
-
-  ctl.datastore().assign<std::string>("ControlMode", "Position");
+  // ctl.datastore().assign<std::string>("ModeState", "Position");
+  // ctl.datastore().assign<std::string>("ControlMode", "Position");
 
   ctl.compPostureTask->target(ctl.postureHorizontalStart);
 
-  ctl.compPostureTask->stiffness(100);
-  ctl.compPostureTask->damping(100);
+  ctl.compPostureTask->stiffness(1);
+  ctl.compPostureTask->damping(2);
   state_ = 2;
 }
 

@@ -1,5 +1,4 @@
 #include "CollisionBenchmarkController_Forward.h"
-#include "../CollisionBenchmarkController.h"
 
 void CollisionBenchmarkController_Forward::configure(const mc_rtc::Configuration & config) {}
 
