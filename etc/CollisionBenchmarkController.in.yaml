@@ -58,11 +58,18 @@ transitions:
 
   # Reactions
   - [CollisionBenchmarkController_ReactionSimple, OK, CollisionBenchmarkController_Initial, Auto]
-  
+
+  # EETest
+  - [CollisionBenchmarkController_Initial, EETest, CollisionBenchmarkController_EETest, Strict]
+  - [CollisionBenchmarkController_EETest, OK, CollisionBenchmarkController_ReactionSimple, Auto]
+
 # Initial state
 init: CollisionBenchmarkController_Initial
 
 # Plugins for simulation
-Plugins: [TorqueResidual, EnergyResidualTorque, EnergyResidualCurrent, CurrentResidual, CollisionDetectionZurlo, CollisionDetectionJerk, CollisionDetectionMomentumError, CollisionDetectionPiSliding, SuperTwisting, CollisionDetectionForceTorqueSensor, ADCCollisionSensor]
+# Plugins: [TorqueResidual, EnergyResidualTorque, EnergyResidualCurrent, CurrentResidual, CollisionDetectionZurlo, CollisionDetectionJerk, CollisionDetectionMomentumError, CollisionDetectionPiSliding, SuperTwisting, CollisionDetectionForceTorqueSensor, ADCCollisionSensor, CollisionMonitoringBirjandi, SectionCollisionSensor]
 # Plugins for deployment on real robot
-# Plugins: [RosImuSensor, RosForceSensor, TorqueResidual, EnergyResidualTorque, EnergyResidualCurrent, CurrentResidual, CollisionDetectionZurlo, CollisionDetectionJerk, CollisionDetectionMomentumError, CollisionDetectionPiSliding, SuperTwisting, CollisionDetectionForceTorqueSensor, ADCCollisionSensor]
+Plugins: [RosImuSensor, RosForceSensor, TorqueResidual, EnergyResidualTorque, EnergyResidualCurrent, CurrentResidual, CollisionDetectionZurlo, CollisionDetectionJerk, CollisionDetectionMomentumError, CollisionDetectionPiSliding, SuperTwisting, CollisionDetectionForceTorqueSensor, ADCCollisionSensor, CollisionMonitoringBirjandi, SectionCollisionSensor]
+
+pnp_zMin: 0.2
+forward_xMax: 0.65

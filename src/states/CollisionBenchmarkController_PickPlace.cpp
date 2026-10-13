@@ -11,9 +11,9 @@ void CollisionBenchmarkController_PickPlace::start(mc_control::fsm::Controller &
   ctl.postureTask->weight(0.1);
   ctl.eeTask->reset();
   ctl.eeTask->positionTask->position(ctl.taskPosPickPlaceDownRight);
-  ctl.eeTask->positionTask->stiffness(30);
+  ctl.eeTask->positionTask->stiffness(40);
   ctl.eeTask->positionTask->weight(10000);
-  
+
   ctl.solver().addTask(ctl.eeTask);
 }
 
@@ -29,9 +29,9 @@ bool CollisionBenchmarkController_PickPlace::run(mc_control::fsm::Controller & c
     return true;
   }
 
-  if (ctl.eeTask->positionTask->eval().norm() < 0.05)
+  if(ctl.eeTask->positionTask->eval().norm() < 0.05)
   {
-    switch (state_) 
+    switch(state_)
     {
       case DR:
         ctl.eeTask->positionTask->position(ctl.taskPosPickPlaceUpRight);

@@ -1,7 +1,7 @@
 #pragma once
 #include <mc_control/fsm/Controller.h>
-#include <mc_tasks/PostureTask.h>
 #include <mc_tasks/EndEffectorTask.h>
+#include <mc_tasks/PostureTask.h>
 
 #include "api.h"
 #include <Eigen/src/Core/Matrix.h>
@@ -40,6 +40,9 @@ struct CollisionBenchmarkController_DLLAPI CollisionBenchmarkController : public
   // Tasks
   std::shared_ptr<mc_tasks::PostureTask> postureTask;
   std::shared_ptr<mc_tasks::EndEffectorTask> eeTask;
+
+  double pnp_zMin = 0.2; // 0.05
+  double forward_xMax = 0.65;
 
 private:
   mc_rtc::Configuration config_;

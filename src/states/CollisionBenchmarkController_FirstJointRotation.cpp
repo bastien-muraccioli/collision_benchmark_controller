@@ -10,32 +10,28 @@ void CollisionBenchmarkController_FirstJointRotation::start(mc_control::fsm::Con
 {
   auto & ctl = static_cast<CollisionBenchmarkController &>(ctl_);
   jointNumber = ctl.robot(ctl.robots()[0].name()).refJointOrder().size();
-  
+
   ctl.postureTask->target(ctl.postureFirstJointRotation);
   ctl.postureTask->stiffness(400);
   velocity_ = Eigen::VectorXd::Zero(jointNumber);
   accel_ = Eigen::VectorXd::Zero(jointNumber);
   q_d_ = ctl.postureFirstJointRotation;
-  
-  auto it = ctl.postureFirstJointRotation.begin();
-  q_min_ = it->second[0];
-  q_d_zero_ = q_min_;
-  auto it2 = ctl.postureFirstJointRotation_end.begin();
-  q_max_ = it2->second[0];
-  delta_q_ = std::abs(q_max_ - q_min_);
 
-  // Dynamically calculate the total time that is determined by target position and speed limits
-  total_time_ = delta_q_ / vel_max_ / (1 - accel_ratio_);  // Calculate the required time based on target position and peak speed
-  
-  // Time partitioning
-  tf_acc_ = total_time_ * accel_ratio_; // Acceleration time
-  tf_const_ = total_time_ - 2 * tf_acc_; // Constant speed time
+  q_start_ = ctl.postureFirstJointRotation.at("joint_1")[0];
+  q_end_ = ctl.postureFirstJointRotation_end.at("joint_1")[0];
+  dir0_ = (q_end_ >= q_start_) ? 1.0 : -1.0; // direction derived from the targets
+  delta_q_ = std::abs(q_end_ - q_start_);
+  forward_ = true;
+  time_counter_ = 0.0;
+  q_d_zero_ = q_start_;
 
-  // Calculate constant acceleration
+  total_time_ = delta_q_ / vel_max_ / (1 - accel_ratio_);
+  tf_acc_ = total_time_ * accel_ratio_;
+  tf_const_ = total_time_ - 2 * tf_acc_;
   accel_constant_ = vel_max_ / tf_acc_;
 
-  mc_rtc::log::info("[CollisionBenchmarkController_FirstJointRotation] q_min_ {}, q_max_ {}, delta_q_ {}, vel_max_ {}, total_time_ {}, tf_acc_ {}, tf_const_ {}, accel_constant_ {}",
-                    q_min_, q_max_, delta_q_, vel_max_, total_time_, tf_acc_, tf_const_, accel_constant_);
+  mc_rtc::log::info("[CollisionBenchmarkController_FirstJointRotation] q_start_ {}, q_end_ {}, dir {}, total_time_ {}",
+                    q_start_, q_end_, dir0_, total_time_);
 }
 
 bool CollisionBenchmarkController_FirstJointRotation::run(mc_control::fsm::Controller & ctl_)
@@ -65,68 +61,49 @@ void CollisionBenchmarkController_FirstJointRotation::teardown(mc_control::fsm::
 
 void CollisionBenchmarkController_FirstJointRotation::computeTrapezoidVelocity(mc_control::fsm::Controller & ctl)
 {
-
-  auto & realRobot = ctl.realRobot(ctl.robots()[0].name());
-
   time_counter_ += ctl.timeStep;
-  double a_t;
-  double v_t;
-  double q_zero;
+  const double t = std::min(time_counter_, total_time_); // no overshoot past the end
 
-  if(sign_)
+  const double dir = forward_ ? dir0_ : -dir0_;
+  const double q0 = forward_ ? q_start_ : q_end_;
+
+  double a, v, s; // magnitudes along the path
+  if(t <= tf_acc_)
   {
-    q_zero = q_min_;
+    a = accel_constant_;
+    v = accel_constant_ * t;
+    s = 0.5 * accel_constant_ * t * t;
+  }
+  else if(t <= tf_acc_ + tf_const_)
+  {
+    a = 0.0;
+    v = vel_max_;
+    s = 0.5 * accel_constant_ * tf_acc_ * tf_acc_ + vel_max_ * (t - tf_acc_);
   }
   else
   {
-    q_zero = q_max_;
+    const double td = t - (tf_acc_ + tf_const_);
+    a = -accel_constant_;
+    v = vel_max_ - accel_constant_ * td;
+    s = 0.5 * accel_constant_ * tf_acc_ * tf_acc_ + vel_max_ * tf_const_ + vel_max_ * td
+        - 0.5 * accel_constant_ * td * td;
   }
 
-  if(time_counter_ <= tf_acc_)
+  q_d_zero_ = q0 + dir * s;
+  double v_t = dir * v;
+  double a_t = dir * a;
+
+  if(time_counter_ >= total_time_)
   {
-    a_t = accel_constant_ * (sign_ ? 1.0 : -1.0);
-    v_t = accel_constant_ * time_counter_ * (sign_ ? 1.0 : -1.0);
-    q_d_zero_ = q_zero + 0.5 * accel_constant_ * time_counter_ * time_counter_ * (sign_ ? 1.0 : -1.0);
-  }
-  else if(time_counter_ > tf_acc_ && time_counter_ <= tf_const_ + tf_acc_)
-  {
+    // End of stroke: snap to the target and reverse
+    q_d_zero_ = forward_ ? q_end_ : q_start_;
+    v_t = 0.0;
     a_t = 0.0;
-    v_t = vel_max_* (sign_ ? 1.0 : -1.0);
-    q_d_zero_ = q_zero + 0.5 * accel_constant_ * tf_acc_ * tf_acc_ * (sign_ ? 1.0 : -1.0) + vel_max_ * (time_counter_ - tf_acc_) * (sign_ ? 1.0 : -1.0);
+    time_counter_ = 0.0;
+    forward_ = !forward_;
   }
-  else if(time_counter_ > tf_const_ + tf_acc_)
-  {
-    double t_dec = time_counter_ - (tf_acc_ + tf_const_);
-    a_t = -accel_constant_ * (sign_ ? 1.0 : -1.0);
-    v_t = vel_max_ * (sign_ ? 1.0 : -1.0) - accel_constant_ * t_dec * (sign_ ? 1.0 : -1.0);
-    q_d_zero_ = q_zero + 0.5 * accel_constant_ * tf_acc_ * tf_acc_ * (sign_ ? 1.0 : -1.0) +
-     vel_max_ * tf_const_ * (sign_ ? 1.0 : -1.0) + 
-     vel_max_ * t_dec * (sign_ ? 1.0 : -1.0) - 0.5 * accel_constant_ * t_dec * t_dec * (sign_ ? 1.0 : -1.0);
 
-    if(time_counter_ >= total_time_)
-    {
-      time_counter_ = 0.0;
-      if(sign_)
-      { 
-        q_d_zero_ = q_max_;
-        sign_ = false;
-      }
-      else
-      {
-        q_d_zero_ = q_min_;
-        sign_ = true;
-      }
-
-    }
-  }
-  else
-  {
-    mc_rtc::log::warning(
-      "[CollisionBenchmarkController_FirstJointRotation] Out of time");
-  }
-  
-  auto it = q_d_.begin();
-  q_d_[it->first][0] = q_d_zero_;
+  q_d_["joint_1"][0] = q_d_zero_;
   velocity_[0] = v_t;
   accel_[0] = a_t;
 }

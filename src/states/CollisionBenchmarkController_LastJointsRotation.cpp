@@ -6,7 +6,7 @@ void CollisionBenchmarkController_LastJointsRotation::start(mc_control::fsm::Con
 {
   auto & ctl = static_cast<CollisionBenchmarkController &>(ctl_);
   ctl.postureTask->target(ctl.postureHome);
-  ctl.postureTask->stiffness(100);
+  ctl.postureTask->stiffness(70);
 }
 
 bool CollisionBenchmarkController_LastJointsRotation::run(mc_control::fsm::Controller & ctl_)
@@ -21,7 +21,7 @@ bool CollisionBenchmarkController_LastJointsRotation::run(mc_control::fsm::Contr
     return true;
   }
 
-  if (ctl.postureTask->eval().norm() < 0.1)
+  if(ctl.postureTask->eval().norm() < 0.1)
   {
     if(need_home_)
     {
@@ -30,7 +30,7 @@ bool CollisionBenchmarkController_LastJointsRotation::run(mc_control::fsm::Contr
     }
     else
     {
-      switch (state_) 
+      switch(state_)
       {
         case 0:
           ctl.postureTask->target(ctl.postureUp);
